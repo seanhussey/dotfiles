@@ -2,9 +2,13 @@ if ENV['RAILS_ENV']
   load File.dirname(__FILE__) + '/.railsrc'
 end
 
+#http://drnicwilliams.com/2006/10/12/my-irbrc-for-consoleirb/
+#require 'map_by_method'
+#require 'what_methods'
+
 require 'rubygems'
 require 'pp'
-require 'g'
+
 IRB.conf[:AUTO_INDENT] = true
 
 # Tab completion
@@ -17,10 +21,20 @@ require 'irb/ext/save-history'
 IRB.conf[:SAVE_HISTORY] = 1000
 IRB.conf[:EVAL_HISTORY] = 100
 
+class Object
+  def local_methods
+    (methods - Object.instance_methods).sort
+  end
+end
+
 # Simple ri integration
 def ri(*names)
   system("ri #{names.map {|name| name.to_s}.join(" ")}")
 end
+
+# Called when the irb session is ready, after
+# the Rails goodies used above have been loaded.
+#IRB.conf[:IRB_RC] = Proc.new { your_custom_method_here }
 
 # http://svn.bleything.net/toys/irbhistory/history.rb
 # Adds shell-style history display and replay to irb.  The magic happens in
@@ -128,10 +142,3 @@ def print_line(line_number, show_line_numbers = true)
   print "[%04d] " % line_number if show_line_numbers
   puts get_line(line_number)
 end
-
-class Object
-  def local_methods
-    (methods - Object.instance_methods).sort
-  end
-end
-
