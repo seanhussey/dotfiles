@@ -137,3 +137,7 @@ function parse_git_dirty {
 
 PS1='\u@\h:\w$(__git_ps1 " (\[$(parse_git_dirty)\]%s\[\e[m\])") \$ '
 export PS1
+
+# RVM
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
