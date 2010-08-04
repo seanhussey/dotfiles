@@ -1,3 +1,5 @@
+source ~/.bashrc
+
 # my CDPATH
 export CDPATH=.:~:/usr/local/:~/Projects:~/Projects:~/DMC
 
@@ -6,7 +8,7 @@ export SVN_EDITOR="mate -w"
 export GIT_EDITOR="mate -w"
 
 # my PATH
-export PATH="/opt/subversion/bin:/usr/local/git/bin:/opt/ruby/bin:/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/bin:/sbin:/usr/bin:/usr/sbin:$HOME/bin"
+export PATH="$HOME/bin:$PATH"
 
 # Lisa aliases
 alias cdl='cd ~/DMC/lisa'
