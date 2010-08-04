@@ -2,31 +2,9 @@ require 'autotest/rails'
 require 'autotest/growl'
 require 'autotest/fsevent'
 
-# Prevents autotest from running your entire test suite after fixing a failed test.
-# Works with ZenTest 3.10.0
-# Place this in your .autotest file:
-require 'rubygems'
-require 'active_support'
-class Autotest
-  def run_with_not_rerunning_everything
-    hook :initialize
-    reset
-    add_sigint_handler
- 
-    self.last_mtime = Time.now if $f
- 
-    loop do # ^c handler
-      begin
-        get_to_green
-        hook :all_good unless self.tainted
-        wait_for_changes
-      rescue Interrupt
-        break if self.wants_to_quit
-        reset
-      end
-    end
-    hook :quit
+Autotest.add_hook :initialize do |autotest|
+  %w{.git .DS_Store ._* vendor rerun.txt}.each do |exception|
+    autotest.add_exception(exception)
   end
-  alias_method_chain :run, :not_rerunning_everything
+  autotest.add_exception %r%^\./tmp%
 end
-
