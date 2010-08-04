@@ -142,3 +142,14 @@ def print_line(line_number, show_line_numbers = true)
   print "[%04d] " % line_number if show_line_numbers
   puts get_line(line_number)
 end
+
+begin
+  require "ap"
+  IRB::Irb.class_eval do
+    def output_value
+      ap @context.last_value
+    end
+  end
+rescue LoadError => e
+  puts "ap gem not found.  Try typing 'gem install awesome_print' to get super-fancy output."
+end
