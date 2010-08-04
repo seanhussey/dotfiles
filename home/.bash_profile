@@ -14,6 +14,10 @@ export PATH="$HOME/bin:$PATH"
 alias cdl='cd ~/DMC/lisa'
 alias tl='terminit lisa'
 
+# Dashboard aliases
+alias cdd='cd ~/DMC/dashboard_prototype'
+alias td='terminit dashboard'
+
 # Rails Settings
 export AUTOFEATURE=true
 alias cpd='cap production deploy'
