@@ -8,3 +8,5 @@ Autotest.add_hook :initialize do |autotest|
   end
   autotest.add_exception %r%^\./tmp%
 end
+
+Autotest::Growl::image_dir = '/Volumnes/seanhussey/Pictures/Autotest'
