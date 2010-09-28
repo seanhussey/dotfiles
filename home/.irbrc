@@ -2,10 +2,6 @@ if ENV['RAILS_ENV']
   load File.dirname(__FILE__) + '/.railsrc'
 end
 
-#http://drnicwilliams.com/2006/10/12/my-irbrc-for-consoleirb/
-#require 'map_by_method'
-#require 'what_methods'
-
 require 'rubygems'
 require 'pp'
 
@@ -143,6 +139,44 @@ def print_line(line_number, show_line_numbers = true)
   puts get_line(line_number)
 end
 
+require 'wirble'
+
+# load wirble
+Wirble.init
+Wirble.colorize
+
+if ENV.include?('RAILS_ENV')
+  if !Object.const_defined?('RAILS_DEFAULT_LOGGER')
+    require 'logger'
+    Object.const_set('RAILS_DEFAULT_LOGGER', Logger.new(STDOUT))
+  end
+
+  def sql(query)
+    ActiveRecord::Base.connection.select_all(query)
+  end
+  
+  if ENV['RAILS_ENV'] == 'test'
+    require 'test/test_helper'
+  end
+
+# for rails 3
+elsif defined?(Rails) && !Rails.env.nil?
+  if Rails.logger
+    Rails.logger =Logger.new(STDOUT)
+    ActiveRecord::Base.logger = Rails.logger
+  end
+  if Rails.env == 'test'
+    require 'test/test_helper'
+  end
+else
+  # nothing to do
+end
+
+# annotate column names of an AR model
+def show(obj)
+  y(obj.send("column_names"))
+end
+
 begin
   require "ap"
   IRB::Irb.class_eval do
@@ -153,3 +187,5 @@ begin
 rescue LoadError => e
   puts "ap gem not found.  Try typing 'gem install awesome_print' to get super-fancy output."
 end
+
+puts "> all systems are go wirble/hirb/ap/show <"
