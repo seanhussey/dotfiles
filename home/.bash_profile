@@ -1,7 +1,7 @@
 source ~/.bashrc
 
 # my CDPATH
-export CDPATH=.:~:/usr/local/:~/Projects:~/Projects:~/DMC
+export CDPATH=.:~:/usr/local/:~/Projects
 
 # Make TextMate the default Subversion editor.  I have no idea how this works on machines without TextMate.
 export SVN_EDITOR="mate -w"
@@ -9,14 +9,6 @@ export GIT_EDITOR="mate -w"
 
 # my PATH
 export PATH="$HOME/bin:$PATH"
-
-# Lisa aliases
-alias cdl='cd ~/DMC/lisa'
-alias tl='terminit lisa'
-
-# Dashboard aliases
-alias cdd='cd ~/DMC/dashboard_prototype'
-alias td='terminit dashboard'
 
 # Rails Settings
 export AUTOFEATURE=true
@@ -37,14 +29,6 @@ cl() { cd "$@" && ll; }
 
 # Process aliases
 alias zom="ps aux | awk '{ print $8 \" \" $2 }' | grep -w Z"
-
-# Subversion aliases
-alias sup='svn info; svn update'
-alias sci='svn ci $*'
-alias sco='svn co $*'
-alias sd='svn diff $*'
-alias sst='svn status'
-alias sl='svn log $*'
 
 # git aliases
 alias gs='git status'
