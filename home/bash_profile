@@ -1,23 +1,19 @@
 source ~/.bashrc
 
 # my CDPATH
-export CDPATH=.:~:/usr/local/:~/Projects
+export CDPATH=.:~:~/Projects
 
 # Make TextMate the default Subversion editor.  I have no idea how this works on machines without TextMate.
+export EDITOR="mate -w"
 export SVN_EDITOR="mate -w"
 export GIT_EDITOR="mate -w"
 
 # my PATH
-export PATH="$HOME/bin:$PATH"
-
-# Rails Settings
-export AUTOFEATURE=true
-alias cpd='cap production deploy'
-alias cpdm='cap production deploy:migrations'
-alias csd='cap staging deploy'
-alias csdm='cap staging deploy:migrations'
+export PATH="/usr/local/share/npm/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:$HOME/bin:$PATH"
 
 # Convenience aliases
+alias bp='$EDITOR ~/.bash_profile'
+alias brc='$EDITOR ~/.bashrc'
 alias realias='source ~/.bash_profile'
 alias ll='ls -AlFT'
 alias ls='/bin/ls -F'
@@ -27,19 +23,12 @@ alias flushdns='sudo dscacheutil -flushcache'
 alias lc="cl"
 cl() { cd "$@" && ll; }
 
-# Process aliases
-alias zom="ps aux | awk '{ print $8 \" \" $2 }' | grep -w Z"
-
 # git aliases
 alias gs='git status'
 alias gb='git branch -a --color'
 alias gd='git diff --color'
 alias gc='git commit -e'
-alias ga='git add'
-alias gl='git log'
-alias gps='git push'
-alias gpl='git pull'
-alias gco='git checkout'
+alias ungit="find . -name '.git' -exec rm -rf {} \;"
 
 # Command aliases
 alias lynx='/Applications/lynx.command'
@@ -66,14 +55,9 @@ shopt -s dotglob
 # Analyze my .bash_history
 alias ba='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 30'
 
-# Set the window xterm window title
-case $TERM in
-    xterm*)
-        PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}:${PWD}\007"'
-        ;;
-    *)
-        ;;
-esac
+# For TimerApp
+PROMPT_TITLE='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"'
+export PROMPT_COMMAND="${PROMPT_COMMAND} ${PROMPT_TITLE}; "
 
 # Set up better bash completion.
 # Get bash_completion here: http://www.caliban.org/bash/index.shtml#completion
@@ -92,7 +76,7 @@ _mategem()
 }
 
 # Also set up rake task completion
-complete -C /Users/sean/Dropbox/Laptop/home/rakefiles/rake_completion.rb -o default rake
+complete -C ~/Dropbox/Projects/home/rakefiles/rake_completion.rb -o default rake
 
 # Open up gem documentation in a browser.
 # http://stephencelis.com/archive/2008/6/bashfully-yours-gem-shortcuts
@@ -109,19 +93,51 @@ _gemdocomplete() {
 complete -o default -o nospace -F _gemdocomplete gemdoc
 complete -F _mategem -o dirnames mategem
 
-source ~/.git-completion.sh
 function parse_git_dirty {
   if [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]]
-	then
-		echo "\e[0;31m"
-	else
-		echo "\e[0;00m"
+  then
+    echo "\e[0;31m"
+  else
+    echo "\e[0;00m"
   fi
-} 
+}
 
+#'\h:\w \u\$ '; f
 PS1='\u@\h:\w$(__git_ps1 " (\[$(parse_git_dirty)\]%s\[\e[m\])") \$ '
 export PS1
 
-# RVM
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+  . `brew --prefix`/etc/bash_completion
+fi
 
+#copy output of last command to clipboard
+alias cl="fc -e -|pbcopy"
+
+# top
+alias cpu='top -o cpu'
+alias mem='top -o rsize' # memory
+
+# copy the working directory path
+alias cpwd='pwd|tr -d "\n"|pbcopy'
+
+# share history between terminal sessions
+alias he="history -a" # export history
+alias hi="history -n" # import history
+
+# Get your current public IP
+alias ip="curl icanhazip.com"
+
+# recursively delete Dropbox conflicted files
+alias rmdbc="find . -name *\ \(*conflicted* -exec rm {} \;"
+
+# mute the system volume
+alias stfu="osascript -e 'set volume output muted true'"
+
+# time machine log
+alias tmlog="syslog -F '\$Time \$Message' -k Sender com.apple.backupd-auto -k Time ge -30m | tail -n 1"
+
+# trim newlines
+alias tn='tr -d "\n"'
+
+# list TODO/FIX lines from the current project
+alias todos="ack -n --nogroup '(TODO|FIX(ME)?):'"
