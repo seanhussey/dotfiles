@@ -18,6 +18,7 @@ alias realias='source ~/.bash_profile'
 alias ll='ls -AlFT'
 alias ls='/bin/ls -F'
 alias flushdns='sudo dscacheutil -flushcache'
+alias ffs=‘sudo !!’
 
 # Compress the cd, ls -l series of commands.
 alias lc="cl"
