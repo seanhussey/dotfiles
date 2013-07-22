@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require 'open-uri'
+
+open(ARGV[0]).read =~ /<title>\[(VN-\d+)\](.*?) - JIRA<\/title>/
+ticket  = $1
+feature = $2.downcase.gsub(/\W+/, "_")
+puts "#{ticket}#{feature}"
