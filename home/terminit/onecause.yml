@@ -1,0 +1,17 @@
+---
+- tab1:
+  - cdo
+  - git pull
+  - git rebase
+  - rake db:migrate
+  - rake db:test:clone_structure
+  - autotest
+- tab2: 
+  - cdo
+  - tail -f log/development.log
+- tab3:
+  - cdo
+  - start_solr
+- tab4:
+  - cdo
+  - mate .
