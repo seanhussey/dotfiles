@@ -38,6 +38,9 @@ alias software_update='sudo softwareupdate -i -a'
 # Generate an ssh key pair
 alias keypair='ssh-keygen -t dsa'
 
+# Automatically installs your public key to the remote host
+# ssh-copy-id 'user@remotehost'
+
 # BASH Shell configs
 export HISTFILESIZE=1000000
 export HISTSIZE=1000000

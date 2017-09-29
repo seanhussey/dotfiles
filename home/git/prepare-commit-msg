@@ -1,21 +1,26 @@
 #!/usr/bin/env ruby
 # 
 # Copy this file into .git/hooks and chmod +x
-# Acceptable branch formats:
-# VN-1234 -> VN-1234: your message
-# VN-1234_some_feature -> VN-1234 - Some Feature: your message
+# Acceptable branch formats will append to your message:
+# AM-1234 -> AM-1234
+# AM-1234_some_feature -> AM-1234 - Some Feature
 
 require 'rubygems'
-require 'git'
+begin
+  require 'git'
+rescue LoadError
+  puts "You must install the git gem."
+  exit
+end
 
-TICKET_MATCH = /VN-[\d]+/i
+TICKET_MATCH = /AM-[\d]+/i
 repo = Git.open(".")
 File.open(ARGV[0], "r+") do |file|
   if ticket = repo.current_branch.match(TICKET_MATCH)
-    commit_title = repo.current_branch.split(TICKET_MATCH)[1].split("_").delete_if { |e| e.empty? }.each { |word| word.capitalize! }.join(" ") rescue nil
+    commit_title = repo.current_branch.split(TICKET_MATCH)[1].split("-").delete_if { |e| e.empty? }.each { |word| word.capitalize! }.join(" ") rescue nil
     message = file.read
     file.rewind
-    file.puts "#{ticket[0].split("_")[1]}#{commit_title ? " - #{commit_title}" : ""}: #{message}"
+    file.puts "#{message}\n\n#{ticket[0]}#{commit_title ? " - #{commit_title}" : ""}"
   end
 end
 
